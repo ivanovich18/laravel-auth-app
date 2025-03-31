@@ -1,66 +1,140 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Auth App with Breeze, Sanctum, SQLite, and Google Login
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a Laravel 12 application demonstrating user authentication using multiple methods: standard email/password registration and login (via Laravel Breeze) and social authentication using Google (via Laravel Socialite). It is configured to use SQLite as its database, making setup simple. Laravel Sanctum is included for potential future API/SPA authentication needs.
 
-## About Laravel
+**Project Generated On:** Sunday, March 30, 2025
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   User Registration (Email/Password)
+-   User Login (Email/Password)
+-   Password Reset Functionality
+-   Login with Google Account (OAuth 2.0 via Socialite)
+-   Basic Dashboard page after login
+-   Uses SQLite for simple database setup
+-   Frontend scaffolding provided by Laravel Breeze (Blade stack)
+-   Laravel Sanctum included (configured mainly for SPA/API use if extended later)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Before you begin, ensure you have the following installed:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   PHP >= 8.2
+-   Composer
+-   Node.js & npm
+-   Git
+-   SQLite (Usually included with PHP, but ensure the `php-sqlite3` extension is enabled if needed)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation & Setup
 
-### Premium Partners
+Follow these steps to get the application running locally:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+1.  **Clone the Repository:**
 
-## Contributing
+    ```bash
+    git clone <your-repository-url> laravel-auth-app
+    cd laravel-auth-app
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    _(Replace `<your-repository-url>` with the actual URL of your GitHub repository)_
 
-## Code of Conduct
+2.  **Install PHP Dependencies:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    composer install
+    ```
 
-## Security Vulnerabilities
+3.  **Create Environment File:**
+    Copy the example environment file:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    cp .env.example .env
+    ```
 
-## License
+4.  **Generate Application Key:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    php artisan key:generate
+    ```
+
+5.  **Configure Environment (.env file):**
+    Open the `.env` file and configure the following settings:
+
+    -   **Database:** Set it to use SQLite. Remove or comment out other `DB_*` variables not needed for SQLite.
+
+        ```dotenv
+        DB_CONNECTION=sqlite
+        # DB_HOST=127.0.0.1
+        # DB_PORT=3306
+        # DB_DATABASE=laravel
+        # DB_USERNAME=root
+        # DB_PASSWORD=
+        ```
+
+    -   **Google Credentials:** Add your Google OAuth 2.0 Client ID and Secret, and set the correct Redirect URI. You get these from the [Google Cloud Platform Console](https://console.cloud.google.com/).
+        ```dotenv
+        GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+        GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+        # Ensure this matches EXACTLY what's in your Google Cloud Console Authorized Redirect URIs
+        GOOGLE_REDIRECT_URI=[http://127.0.0.1:8000/auth/google/callback](http://127.0.0.1:8000/auth/google/callback)
+        ```
+    -   **App URL (Optional but Recommended):** Set your local application URL.
+        ```dotenv
+        APP_URL=[http://127.0.0.1:8000](http://127.0.0.1:8000)
+        ```
+
+6.  **Create SQLite Database File:**
+    Create the empty database file in the `database` directory:
+
+    ```bash
+    touch database/database.sqlite
+    ```
+
+7.  **Run Database Migrations:**
+    This will create the `users`, `password_reset_tokens`, `sessions`, etc., tables. It should also include the migration to add the `google_id` column to the `users` table (ensure this migration exists in `database/migrations/`).
+
+    ```bash
+    php artisan migrate
+    ```
+
+8.  **Install Frontend Dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+9.  **Compile Frontend Assets:**
+    For development (with hot reloading):
+
+    ```bash
+    npm run dev
+    ```
+
+    For production:
+
+    ```bash
+    npm run build
+    ```
+
+10. **Clear Cached Configuration (Important after .env changes):**
+    ```bash
+    php artisan config:clear
+    php artisan route:clear
+    php artisan view:clear
+    ```
+
+---
+
+## Running the Application
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
