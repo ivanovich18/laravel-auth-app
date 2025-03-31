@@ -1,140 +1,87 @@
-# Laravel Auth App with Breeze, Sanctum, SQLite, and Google Login
+# Laravel Auth App - Basic Setup
 
-This is a Laravel 12 application demonstrating user authentication using multiple methods: standard email/password registration and login (via Laravel Breeze) and social authentication using Google (via Laravel Socialite). It is configured to use SQLite as its database, making setup simple. Laravel Sanctum is included for potential future API/SPA authentication needs.
-
-**Project Generated On:** Sunday, March 30, 2025
-
----
-
-## Features
-
--   User Registration (Email/Password)
--   User Login (Email/Password)
--   Password Reset Functionality
--   Login with Google Account (OAuth 2.0 via Socialite)
--   Basic Dashboard page after login
--   Uses SQLite for simple database setup
--   Frontend scaffolding provided by Laravel Breeze (Blade stack)
--   Laravel Sanctum included (configured mainly for SPA/API use if extended later)
+Simple Laravel 12 application with Breeze authentication (Email/Password + Google Login via Socialite) configured to use SQLite.
 
 ---
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
-
--   PHP >= 8.2
+-   PHP (>= 8.2 recommended)
 -   Composer
 -   Node.js & npm
 -   Git
--   SQLite (Usually included with PHP, but ensure the `php-sqlite3` extension is enabled if needed)
+-   SQLite (PHP extension enabled)
 
 ---
 
-## Installation & Setup
+## Setup Instructions
 
-Follow these steps to get the application running locally:
-
-1.  **Clone the Repository:**
+1.  **Clone:**
 
     ```bash
-    git clone <your-repository-url> laravel-auth-app
+    git clone https://github.com/ivanovich18/laravel-auth-app.git laravel-auth-app
     cd laravel-auth-app
     ```
 
-    _(Replace `<your-repository-url>` with the actual URL of your GitHub repository)_
-
-2.  **Install PHP Dependencies:**
+2.  **Install Dependencies:**
 
     ```bash
     composer install
-    ```
-
-3.  **Create Environment File:**
-    Copy the example environment file:
-
-    ```bash
-    cp .env.example .env
-    ```
-
-4.  **Generate Application Key:**
-
-    ```bash
-    php artisan key:generate
-    ```
-
-5.  **Configure Environment (.env file):**
-    Open the `.env` file and configure the following settings:
-
-    -   **Database:** Set it to use SQLite. Remove or comment out other `DB_*` variables not needed for SQLite.
-
-        ```dotenv
-        DB_CONNECTION=sqlite
-        # DB_HOST=127.0.0.1
-        # DB_PORT=3306
-        # DB_DATABASE=laravel
-        # DB_USERNAME=root
-        # DB_PASSWORD=
-        ```
-
-    -   **Google Credentials:** Add your Google OAuth 2.0 Client ID and Secret, and set the correct Redirect URI. You get these from the [Google Cloud Platform Console](https://console.cloud.google.com/).
-        ```dotenv
-        GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
-        GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
-        # Ensure this matches EXACTLY what's in your Google Cloud Console Authorized Redirect URIs
-        GOOGLE_REDIRECT_URI=[http://127.0.0.1:8000/auth/google/callback](http://127.0.0.1:8000/auth/google/callback)
-        ```
-    -   **App URL (Optional but Recommended):** Set your local application URL.
-        ```dotenv
-        APP_URL=[http://127.0.0.1:8000](http://127.0.0.1:8000)
-        ```
-
-6.  **Create SQLite Database File:**
-    Create the empty database file in the `database` directory:
-
-    ```bash
-    touch database/database.sqlite
-    ```
-
-7.  **Run Database Migrations:**
-    This will create the `users`, `password_reset_tokens`, `sessions`, etc., tables. It should also include the migration to add the `google_id` column to the `users` table (ensure this migration exists in `database/migrations/`).
-
-    ```bash
-    php artisan migrate
-    ```
-
-8.  **Install Frontend Dependencies:**
-
-    ```bash
     npm install
     ```
 
-9.  **Compile Frontend Assets:**
-    For development (with hot reloading):
+3.  **Environment Setup:**
 
     ```bash
-    npm run dev
+    cp .env.example .env
+    php artisan key:generate
     ```
 
-    For production:
+4.  **Configure `.env` File:**
+    Open the `.env` file and set _at least_ the following:
 
-    ```bash
-    npm run build
+    ```dotenv
+    DB_CONNECTION=sqlite
+
+    # Add your Google OAuth Credentials
+    GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+    GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+    GOOGLE_REDIRECT_URI=[http://127.0.0.1:8000/auth/google/callback](http://127.0.0.1:8000/auth/google/callback)
     ```
 
-10. **Clear Cached Configuration (Important after .env changes):**
+    _(Remove or comment out other `DB_`variables like`DB*HOST`, `DB_DATABASE` etc.)*
+
+5.  **Clear Config Cache (Recommended):**
+
     ```bash
     php artisan config:clear
-    php artisan route:clear
-    php artisan view:clear
+    ```
+
+6.  **Prepare Database:**
+
+    ```bash
+    touch database/database.sqlite
+    php artisan migrate
+    ```
+
+    _(Ensure migrations include adding the `google_id` column to the `users` table)_
+
+7.  **Compile Assets:**
+
+    -   For development: `npm run dev`
+    -   For production: `npm run build`
+
+8.  **Run Development Server:**
+    ```bash
+    php artisan serve
     ```
 
 ---
 
-## Running the Application
+## Access
 
-Start the Laravel development server:
+-   **Homepage:** `http://127.0.0.1:8000/`
+-   **Login:** `http://127.0.0.1:8000/login`
+-   **Register:** `http://127.0.0.1:8000/register`
 
-```bash
-php artisan serve
-```
+---
